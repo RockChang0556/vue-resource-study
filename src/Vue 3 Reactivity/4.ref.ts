@@ -4,6 +4,11 @@ import { track, trigger, effect, reactive } from './3.activeEffect';
 
 /* 
   直接使用 reactive 包裹
+	为什么不用这种方式实现
+		1. ref 应该只返回一个 value 属性
+		2. 技术上说, 用 reactive 的话, 我们可以给他加别的属性
+		3. vue3 内部有 isRef 检查, ref 上有一些别的属性支持此检查 (_isRef)
+		4. 性能问题, reactive 做的更多(如判断之前是否有此对象, 是否有只读属性)
 */
 /* function ref1<T extends object>(raw: T) {
 	return reactive({ value: raw });
@@ -11,6 +16,7 @@ import { track, trigger, effect, reactive } from './3.activeEffect';
 const product = ref1({ price: 5, quantity: 2 });
 console.log('[ product ]-12', product);
  */
+
 /* 
   使用 track, trigger 实现
 */
