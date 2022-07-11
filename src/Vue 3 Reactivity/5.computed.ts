@@ -40,3 +40,27 @@ effect(() => {
 	console.log(`Product name is now ${product.name}`);
 });
 product.name = 'Socks'; */
+
+/* 
+	vue 调试小技巧
+	查看当前组件的属性变动, 就能知道这个组件为什么会被重新渲染
+
+	const state = reactive({count: 0})
+	watchEffect(() => {
+		console.log(state.count)
+	}, {
+		onTrack(e) {
+			debugger 
+		},
+		onTrigger(e) {
+			debugger 
+		},
+	})
+
+	// 在 composition api 中
+	setup() {
+		onRenderTracked(e) {},
+		onRenderTriggered(e) {},
+	}
+
+*/

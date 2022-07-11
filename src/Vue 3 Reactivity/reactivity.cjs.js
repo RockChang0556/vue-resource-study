@@ -258,9 +258,17 @@ const arrayInstrumentations = {};
 });
 function createGetter(isReadonly = false, shallow = false) {
 	return function get(target, key, receiver) {
+		// 处理以下边界情况
+		/* 
+			const obj = {}
+			const arr = reactive([obj])
+			const reactiveObj = arr[0]
+			// 不加下面的处理的话 obj !== reactiveObj, 导致 arr.indexof(obj) 一直等于 -1
+		*/
 		if (isArray(target) && hasOwn(arrayInstrumentations, key)) {
 			return Reflect.get(arrayInstrumentations, key, receiver);
 		}
+
 		const res = Reflect.get(target, key, receiver);
 		if (isSymbol(key) && builtInSymbols.has(key)) {
 			return res;
@@ -320,6 +328,8 @@ function createSetter(isReadonly = false, shallow = false) {
 		return result;
 	};
 }
+
+// 调用 delete 关键字删除属性时调用, 如 delete obj.name
 function deleteProperty(target, key) {
 	const hadKey = hasOwn(target, key);
 	const oldValue = target[key];
